@@ -7,7 +7,7 @@ export const App: React.FunctionComponent = () => (
   <ChakraProvider theme={theme}>
     <Box>
       <Flex minH="100vh" direction="row" alignItems="stretch">
-        <Box overflow="auto" w={250} p={2}>
+        <Box overflow="auto" w={250} p={3}>
           <SummaryPane />
         </Box>
         <Box>
