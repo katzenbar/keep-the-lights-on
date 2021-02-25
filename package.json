@@ -31,6 +31,7 @@
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:itch": "PUBLIC_URL=./ react-scripts build && zip -r build.zip build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -51,6 +52,5 @@
   },
   "devDependencies": {
     "prettier": "^2.2.1"
-  },
-  "homepage": "https://katzenbar.github.io/keep-the-lights-on"
+  }
 }
