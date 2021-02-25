@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/keep-the-lights-on/static/js/main.2379eadd.chunk.js",
-    "main.js.map": "/keep-the-lights-on/static/js/main.2379eadd.chunk.js.map",
-    "runtime-main.js": "/keep-the-lights-on/static/js/runtime-main.840a3cec.js",
-    "runtime-main.js.map": "/keep-the-lights-on/static/js/runtime-main.840a3cec.js.map",
-    "static/js/2.05dfc806.chunk.js": "/keep-the-lights-on/static/js/2.05dfc806.chunk.js",
-    "static/js/2.05dfc806.chunk.js.map": "/keep-the-lights-on/static/js/2.05dfc806.chunk.js.map",
-    "index.html": "/keep-the-lights-on/index.html",
-    "static/js/2.05dfc806.chunk.js.LICENSE.txt": "/keep-the-lights-on/static/js/2.05dfc806.chunk.js.LICENSE.txt"
+    "main.js": "/static/js/main.4e2ae200.chunk.js",
+    "main.js.map": "/static/js/main.4e2ae200.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.1ed41bd4.js",
+    "runtime-main.js.map": "/static/js/runtime-main.1ed41bd4.js.map",
+    "static/js/2.05dfc806.chunk.js": "/static/js/2.05dfc806.chunk.js",
+    "static/js/2.05dfc806.chunk.js.map": "/static/js/2.05dfc806.chunk.js.map",
+    "index.html": "/index.html",
+    "static/js/2.05dfc806.chunk.js.LICENSE.txt": "/static/js/2.05dfc806.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.840a3cec.js",
+    "static/js/runtime-main.1ed41bd4.js",
     "static/js/2.05dfc806.chunk.js",
-    "static/js/main.2379eadd.chunk.js"
+    "static/js/main.4e2ae200.chunk.js"
   ]
 }
