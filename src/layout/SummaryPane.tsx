@@ -18,6 +18,8 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
     wattsUsedPerHomePerDay,
     pricePerWatt,
     wattsGeneratedPerDay,
+    ideasAvailable,
+    ideasGeneratedPerDay,
   } = currentStatistics;
 
   return (
@@ -62,6 +64,16 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Text pb={1}>${formatSerializeableBigNumber(cashAvailable)}</Text>
           <Text fontSize="sm" color="gray.400">
             ${formatSerializeableBigNumber(cashEarnedPerDay)} per day
+          </Text>
+        </StackItem>
+
+        <StackItem>
+          <Heading as="h2" size="sm" pb={1}>
+            Research
+          </Heading>
+          <Text pb={1}>{formatSerializeableBigNumber(ideasAvailable)} ideas thought of</Text>
+          <Text fontSize="sm" color="gray.400">
+            {formatSerializeableBigNumber(ideasGeneratedPerDay)} ideas per day
           </Text>
         </StackItem>
       </VStack>
