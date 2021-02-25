@@ -1,9 +1,25 @@
 import { Heading, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
+import { formatSerializeableBigNumber } from "../lib/SerializeableBigNumber";
+import { selectCurrentStatistics } from "../store/gameSlice";
+import { useAppSelector } from "../store/hooks";
 
 type Props = {};
 
 const SummaryPane: React.FunctionComponent<Props> = (props) => {
+  const currentStatistics = useAppSelector(selectCurrentStatistics);
+
+  const {
+    daysElapsed,
+    cashAvailable,
+    cashEarnedPerDay,
+    homesPowered,
+    homesInPowerGrid,
+    wattsUsedPerHomePerDay,
+    pricePerWatt,
+    wattsGeneratedPerDay,
+  } = currentStatistics;
+
   return (
     <>
       <Heading as="h1" size="md" pb={2}>
@@ -12,18 +28,30 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
       <VStack pt={4} align="stretch" spacing={4}>
         <StackItem>
           <Heading as="h2" size="sm" pb={1}>
+            Time Elapsed
+          </Heading>
+          <Text>{formatSerializeableBigNumber(daysElapsed)} days</Text>
+        </StackItem>
+
+        <StackItem>
+          <Heading as="h2" size="sm" pb={1}>
             Power Generation
           </Heading>
-          <Text>10 kWh</Text>
+          <Text pb={1}>{formatSerializeableBigNumber(wattsGeneratedPerDay)} watts per day</Text>
+          <Text fontSize="sm" color="gray.400">
+            ${formatSerializeableBigNumber(pricePerWatt)} per watt
+          </Text>
         </StackItem>
 
         <StackItem>
           <Heading as="h2" size="sm" pb={1}>
             Houses Illuminated
           </Heading>
-          <Text pb={1}>1 / 1</Text>
+          <Text pb={1}>
+            {formatSerializeableBigNumber(homesPowered)} / {formatSerializeableBigNumber(homesInPowerGrid)}
+          </Text>
           <Text fontSize="sm" color="gray.400">
-            100%
+            {formatSerializeableBigNumber(wattsUsedPerHomePerDay)} watts used per house per day
           </Text>
         </StackItem>
 
@@ -31,9 +59,9 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Heading as="h2" size="sm" pb={1}>
             Funds
           </Heading>
-          <Text pb={1}>$1000</Text>
+          <Text pb={1}>${formatSerializeableBigNumber(cashAvailable)}</Text>
           <Text fontSize="sm" color="gray.400">
-            $10 / s
+            ${formatSerializeableBigNumber(cashEarnedPerDay)} per day
           </Text>
         </StackItem>
       </VStack>
