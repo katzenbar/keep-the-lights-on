@@ -1,6 +1,6 @@
 import { Heading, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
-import { formatSerializeableBigNumber } from "../lib/SerializeableBigNumber";
+import { divide, formatSerializeableBigNumber, multiply, serializeNumber } from "../lib/SerializeableBigNumber";
 import { selectCurrentStatistics } from "../store/gameSlice";
 import { useAppSelector } from "../store/hooks";
 
@@ -22,6 +22,8 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
     ideasGeneratedPerDay,
   } = currentStatistics;
 
+  const percentOfHomesPowered = multiply(serializeNumber(100), divide(homesPowered, homesInPowerGrid));
+
   return (
     <>
       <Heading as="h1" size="md" pb={2}>
@@ -33,6 +35,16 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
             Time Elapsed
           </Heading>
           <Text>{formatSerializeableBigNumber(daysElapsed)} days</Text>
+        </StackItem>
+
+        <StackItem>
+          <Heading as="h2" size="sm" pb={1}>
+            Funds
+          </Heading>
+          <Text pb={1}>${formatSerializeableBigNumber(cashAvailable)}</Text>
+          <Text fontSize="sm" color="gray.400">
+            ${formatSerializeableBigNumber(cashEarnedPerDay)} per day
+          </Text>
         </StackItem>
 
         <StackItem>
@@ -52,6 +64,9 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Text pb={1}>
             {formatSerializeableBigNumber(homesPowered)} / {formatSerializeableBigNumber(homesInPowerGrid)}
           </Text>
+          <Text pb={1} color={homesPowered === homesInPowerGrid ? undefined : "red.500"}>
+            {formatSerializeableBigNumber(percentOfHomesPowered)}%
+          </Text>
           <Text fontSize="sm" color="gray.400">
             {formatSerializeableBigNumber(wattsUsedPerHomePerDay)} watts used per house per day
           </Text>
@@ -59,19 +74,9 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
 
         <StackItem>
           <Heading as="h2" size="sm" pb={1}>
-            Funds
-          </Heading>
-          <Text pb={1}>${formatSerializeableBigNumber(cashAvailable)}</Text>
-          <Text fontSize="sm" color="gray.400">
-            ${formatSerializeableBigNumber(cashEarnedPerDay)} per day
-          </Text>
-        </StackItem>
-
-        <StackItem>
-          <Heading as="h2" size="sm" pb={1}>
             Research
           </Heading>
-          <Text pb={1}>{formatSerializeableBigNumber(ideasAvailable)} ideas thought of</Text>
+          <Text pb={1}>{formatSerializeableBigNumber(ideasAvailable)} ideas</Text>
           <Text fontSize="sm" color="gray.400">
             {formatSerializeableBigNumber(ideasGeneratedPerDay)} ideas per day
           </Text>
