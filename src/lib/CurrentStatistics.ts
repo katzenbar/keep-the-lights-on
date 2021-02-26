@@ -1,4 +1,5 @@
 import { calculateWattsGenerated, GeneratorsState } from "./Generators";
+import { calculateIdeasCreated, ResearchersState } from "./Researchers";
 import {
   SerializeableBigNumber,
   serializeNumber,
@@ -24,6 +25,10 @@ export type CurrentStatistics = {
 
   pricePerWatt: SerializeableBigNumber;
   wattsGeneratedPerDay: SerializeableBigNumber;
+
+  ideasAvailable: SerializeableBigNumber;
+  maxIdeasAvailable: SerializeableBigNumber;
+  ideasGeneratedPerDay: SerializeableBigNumber;
 };
 
 export const defaultCurrentStatistics: CurrentStatistics = {
@@ -40,6 +45,10 @@ export const defaultCurrentStatistics: CurrentStatistics = {
 
   pricePerWatt: serializeNumber(0.03),
   wattsGeneratedPerDay: serializeNumber(0),
+
+  ideasAvailable: serializeNumber(0),
+  maxIdeasAvailable: serializeNumber(0),
+  ideasGeneratedPerDay: serializeNumber(0),
 };
 
 const getNextDaysElapsed = (currentStatistics: CurrentStatistics, tickCounter: number): SerializeableBigNumber => {
@@ -68,6 +77,14 @@ const getNextCashAvailable = (currentStatistics: CurrentStatistics): Serializeab
   return add(cashAvailable, divide(cashEarnedPerDay, serializeNumber(ticksPerDay)));
 };
 
+const getNextIdeasAvailable = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
+  const { ticksPerDay, ideasAvailable, ideasGeneratedPerDay } = currentStatistics;
+
+  const ideasPerTick = divide(ideasGeneratedPerDay, serializeNumber(ticksPerDay));
+
+  return add(ideasAvailable, ideasPerTick);
+};
+
 export const getNextCurrentStatistics = (
   currentStatistics: CurrentStatistics,
   tickCounter: number,
@@ -77,20 +94,24 @@ export const getNextCurrentStatistics = (
   const cashAvailable = getNextCashAvailable(currentStatistics);
   const maxCashAvailable = max(cashAvailable, currentStatistics.maxCashAvailable);
 
+  const ideasAvailable = getNextIdeasAvailable(currentStatistics);
+  const maxIdeasAvailable = max(ideasAvailable, currentStatistics.maxCashAvailable);
+
   return {
     ...currentStatistics,
     daysElapsed,
     cashAvailable,
     maxCashAvailable,
+    ideasAvailable,
+    maxIdeasAvailable,
   };
 };
 
-export const updateStatisticsOnGeneratorPurchase = (
+export const updateCachedStatistics = (
   currentStatistics: CurrentStatistics,
-  purchaseCost: SerializeableBigNumber,
   generators: GeneratorsState,
-): CurrentStatistics => {
-  const cashAvailable = subtract(currentStatistics.cashAvailable, purchaseCost);
+  researchersState: ResearchersState,
+) => {
   const wattsGeneratedPerDay = calculateWattsGenerated(generators);
   const wattsConsumedPerDay = min(
     wattsGeneratedPerDay,
@@ -101,6 +122,16 @@ export const updateStatisticsOnGeneratorPurchase = (
     currentStatistics.homesInPowerGrid,
     divide(wattsGeneratedPerDay, currentStatistics.wattsUsedPerHomePerDay),
   );
+  const ideasGeneratedPerDay = calculateIdeasCreated(researchersState);
 
-  return { ...currentStatistics, cashAvailable, cashEarnedPerDay, homesPowered, wattsGeneratedPerDay };
+  return { ...currentStatistics, cashEarnedPerDay, homesPowered, wattsGeneratedPerDay, ideasGeneratedPerDay };
+};
+
+export const makePurchase = (
+  currentStatistics: CurrentStatistics,
+  purchaseCost: SerializeableBigNumber,
+): CurrentStatistics => {
+  const cashAvailable = subtract(currentStatistics.cashAvailable, purchaseCost);
+  currentStatistics.cashAvailable = cashAvailable;
+  return currentStatistics;
 };
