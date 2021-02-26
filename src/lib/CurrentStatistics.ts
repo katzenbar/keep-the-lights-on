@@ -33,7 +33,7 @@ export type CurrentStatistics = {
 
 export const defaultCurrentStatistics: CurrentStatistics = {
   daysElapsed: serializeNumber(0),
-  ticksPerDay: 8,
+  ticksPerDay: 16,
 
   cashAvailable: serializeNumber(1),
   maxCashAvailable: serializeNumber(0),

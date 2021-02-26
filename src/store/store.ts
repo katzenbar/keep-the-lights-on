@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { gameSlice, tick } from "./gameSlice";
 
-const TICKS_PER_SECOND = 8;
+const TICKS_PER_SECOND = 16;
 
 const store = configureStore({
   reducer: {

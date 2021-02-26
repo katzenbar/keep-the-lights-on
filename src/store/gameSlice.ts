@@ -46,6 +46,10 @@ export const gameSlice = createSlice({
       state.currentStatistics = getNextCurrentStatistics(state.currentStatistics, action.payload);
     },
 
+    updateTicksPerDay: (state, action: PayloadAction<number>) => {
+      state.currentStatistics.ticksPerDay = action.payload;
+    },
+
     buyGenerator: (state, action: PayloadAction<GeneratorType>) => {
       const generatorType = action.payload;
 
@@ -90,11 +94,13 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { tick, buyGenerator, buyResearcher, purchaseResearchProject } = gameSlice.actions;
+export const { tick, buyGenerator, buyResearcher, purchaseResearchProject, updateTicksPerDay } = gameSlice.actions;
 
 export const selectGenerators = (state: RootState) => state.game.generators;
 
 export const selectResearchers = (state: RootState) => state.game.researchers;
+
+export const selectTicksPerDay = (state: RootState) => state.game.currentStatistics.ticksPerDay;
 
 export const selectCurrentStatistics = (state: RootState) => state.game.currentStatistics;
 export const selectCashAvailable = (state: RootState) => state.game.currentStatistics.cashAvailable;
