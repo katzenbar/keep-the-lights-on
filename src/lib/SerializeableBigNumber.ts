@@ -39,3 +39,31 @@ export const compare = (a: SerializeableBigNumber, b: SerializeableBigNumber): n
   Decimal.compare(toDecimal(a), toDecimal(b));
 
 export const formatSerializeableBigNumber = (a: SerializeableBigNumber): string => toDecimal(a).toString();
+
+export const formatStandardNumber = (a: SerializeableBigNumber, maxDecimalPlaces: number = 1): string => {
+  const decimal = toDecimal(a);
+
+  if (decimal.lt(new Decimal(10000))) {
+    if (decimal.trunc().eq(decimal)) {
+      return decimal.toFixed(0);
+    } else {
+      return decimal.toFixed(maxDecimalPlaces);
+    }
+  } else {
+    return decimal.toExponential(3);
+  }
+};
+
+export const formatMoney = (a: SerializeableBigNumber, withoutCentsForWholeAmounts: boolean = false): string => {
+  const decimal = toDecimal(a);
+
+  if (decimal.lt(new Decimal(1000))) {
+    if (withoutCentsForWholeAmounts && decimal.trunc().eq(decimal)) {
+      return decimal.toFixed(0);
+    } else {
+      return decimal.toFixed(2);
+    }
+  } else {
+    return decimal.toExponential(3);
+  }
+};

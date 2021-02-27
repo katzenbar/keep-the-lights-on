@@ -2,7 +2,7 @@ import { Button, Heading, StackItem, VStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { researcherTypes, researcherDescriptions, canPurchaseResearcher, ResearcherType } from "../lib/Researchers";
 import { researchProjects } from "../lib/ResearchProjects";
-import { compare, multiply, serializeNumber, formatSerializeableBigNumber } from "../lib/SerializeableBigNumber";
+import { compare, multiply, serializeNumber, formatStandardNumber, formatMoney } from "../lib/SerializeableBigNumber";
 import {
   selectCashAvailable,
   selectMaxCashAvailable,
@@ -63,14 +63,14 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
                   {researcherDescription.name} x {researcher.numberEmployed}
                 </Heading>
                 <Text pb={2} fontSize="sm" color="gray.400">
-                  Generates {formatSerializeableBigNumber(researcher.ideasPerDay)} ideas per day --{" "}
+                  Generates {formatStandardNumber(researcher.ideasPerDay)} ideas per day --{" "}
                   {researcherDescription.colorText}
                 </Text>
                 <Button
                   onClick={() => dispatch(buyResearcher(researcherType))}
                   disabled={!canPurchaseResearcher(cashAvailable, researcher)}
                 >
-                  Hire for ${formatSerializeableBigNumber(researcher.nextPurchaseCost)}
+                  Hire for ${formatMoney(researcher.nextPurchaseCost, true)}
                 </Button>
               </StackItem>
             );
@@ -109,7 +109,7 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
                     onClick={() => dispatch(purchaseResearchProject(researchProject.identifier))}
                     disabled={compare(ideasAvailable, researchProject.cost) !== 1}
                   >
-                    Purchase for {formatSerializeableBigNumber(researchProject.cost)} ideas
+                    Purchase for {formatStandardNumber(researchProject.cost)} ideas
                   </Button>
                 </StackItem>
               );
