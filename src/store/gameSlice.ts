@@ -91,10 +91,21 @@ export const gameSlice = createSlice({
         state.purchasedResearchProjects.push(action.payload);
       }
     },
+
+    resetGame: () => {
+      return initialState;
+    },
   },
 });
 
-export const { tick, buyGenerator, buyResearcher, purchaseResearchProject, updateTicksPerDay } = gameSlice.actions;
+export const {
+  tick,
+  buyGenerator,
+  buyResearcher,
+  purchaseResearchProject,
+  updateTicksPerDay,
+  resetGame,
+} = gameSlice.actions;
 
 export const selectGenerators = (state: RootState) => state.game.generators;
 
