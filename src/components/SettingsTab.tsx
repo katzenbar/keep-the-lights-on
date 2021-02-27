@@ -1,8 +1,10 @@
-import { Button, Heading, Select, StackItem, VStack } from "@chakra-ui/react";
-import React from "react";
+import { Button, Heading, HStack, Select, StackItem, VStack } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { selectTicksPerDay, updateTicksPerDay, resetGame } from "../store/gameSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { ColorModeSwitcher } from "./SettingsTab/ColorModeSwitcher";
+import ExportedGameState from "./SettingsTab/ExportedGameState";
+import ImportGameState from "./SettingsTab/ImportGameState";
 
 const resetWarning =
   "This will reset all of your progress with no benefit, and cannot be undone. Are you sure you want to continue?";
@@ -10,8 +12,25 @@ const resetWarning =
 type Props = {};
 
 const SettingsTab: React.FunctionComponent<Props> = (props) => {
+  const [showExportedGameState, setShowExportedGameState] = useState(false);
+  const [showImportGameState, setShowImportGameState] = useState(false);
+
   const dispatch = useAppDispatch();
   const ticksPerDay = useAppSelector(selectTicksPerDay);
+
+  const handleSave = () => {
+    console.log("woops!");
+  };
+
+  const toggleShowExportedGameState = () => {
+    setShowImportGameState(false);
+    setShowExportedGameState(!showExportedGameState);
+  };
+
+  const toggleShowImportameState = () => {
+    setShowExportedGameState(false);
+    setShowImportGameState(!showImportGameState);
+  };
 
   const handleResetSession = () => {
     if (window.confirm(resetWarning)) {
@@ -30,9 +49,22 @@ const SettingsTab: React.FunctionComponent<Props> = (props) => {
 
       <StackItem>
         <Heading as="h2" size="sm" pb={2}>
+          Game Saves
+        </Heading>
+        <HStack spacing={4}>
+          <Button onClick={handleSave}>Save</Button>
+          <Button onClick={toggleShowExportedGameState}>Export Game Save</Button>
+          <Button onClick={toggleShowImportameState}>Import Game Save</Button>
+          <Button onClick={handleResetSession}>Reset</Button>
+        </HStack>
+        {showExportedGameState && <ExportedGameState mt={4} />}
+        {showImportGameState && <ImportGameState mt={4} />}
+      </StackItem>
+
+      <StackItem>
+        <Heading as="h2" size="sm" pb={2}>
           Reset
         </Heading>
-        <Button onClick={handleResetSession}>Reset Current Session</Button>
       </StackItem>
 
       {process.env.NODE_ENV !== "production" && (

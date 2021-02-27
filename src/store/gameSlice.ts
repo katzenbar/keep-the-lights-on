@@ -92,7 +92,10 @@ export const gameSlice = createSlice({
       }
     },
 
-    resetGame: () => {
+    resetGame: (state, action: PayloadAction<GameState | undefined>) => {
+      if (action.payload) {
+        return action.payload;
+      }
       return initialState;
     },
   },
@@ -107,8 +110,9 @@ export const {
   resetGame,
 } = gameSlice.actions;
 
-export const selectGenerators = (state: RootState) => state.game.generators;
+export const selectGameState = (state: RootState) => state.game;
 
+export const selectGenerators = (state: RootState) => state.game.generators;
 export const selectResearchers = (state: RootState) => state.game.researchers;
 
 export const selectTicksPerDay = (state: RootState) => state.game.currentStatistics.ticksPerDay;
