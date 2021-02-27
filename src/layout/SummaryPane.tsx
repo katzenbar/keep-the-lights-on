@@ -1,6 +1,6 @@
 import { Heading, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
-import { divide, formatSerializeableBigNumber, multiply, serializeNumber } from "../lib/SerializeableBigNumber";
+import { divide, multiply, serializeNumber, formatStandardNumber, formatMoney } from "../lib/SerializeableBigNumber";
 import { selectCurrentStatistics } from "../store/gameSlice";
 import { useAppSelector } from "../store/hooks";
 
@@ -34,16 +34,16 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Heading as="h2" size="sm" pb={1}>
             Time Elapsed
           </Heading>
-          <Text>{formatSerializeableBigNumber(daysElapsed)} days</Text>
+          <Text>{formatStandardNumber(daysElapsed)} days</Text>
         </StackItem>
 
         <StackItem>
           <Heading as="h2" size="sm" pb={1}>
             Funds
           </Heading>
-          <Text pb={1}>${formatSerializeableBigNumber(cashAvailable)}</Text>
+          <Text pb={1}>${formatMoney(cashAvailable)}</Text>
           <Text fontSize="sm" color="gray.400">
-            ${formatSerializeableBigNumber(cashEarnedPerDay)} per day
+            ${formatMoney(cashEarnedPerDay)} per day
           </Text>
         </StackItem>
 
@@ -51,9 +51,9 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Heading as="h2" size="sm" pb={1}>
             Power Generation
           </Heading>
-          <Text pb={1}>{formatSerializeableBigNumber(wattsGeneratedPerDay)} watts per day</Text>
+          <Text pb={1}>{formatStandardNumber(wattsGeneratedPerDay)} watts per day</Text>
           <Text fontSize="sm" color="gray.400">
-            ${formatSerializeableBigNumber(pricePerWatt)} per watt
+            ${formatMoney(pricePerWatt)} per watt
           </Text>
         </StackItem>
 
@@ -62,13 +62,13 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
             Houses Illuminated
           </Heading>
           <Text pb={1}>
-            {formatSerializeableBigNumber(homesPowered)} / {formatSerializeableBigNumber(homesInPowerGrid)}
+            {formatStandardNumber(homesPowered, 2)} / {formatStandardNumber(homesInPowerGrid)}
           </Text>
           <Text pb={1} color={homesPowered === homesInPowerGrid ? undefined : "red.500"}>
-            {formatSerializeableBigNumber(percentOfHomesPowered)}%
+            {formatStandardNumber(percentOfHomesPowered)}%
           </Text>
           <Text fontSize="sm" color="gray.400">
-            {formatSerializeableBigNumber(wattsUsedPerHomePerDay)} watts used per house per day
+            {formatStandardNumber(wattsUsedPerHomePerDay)} watts used per house per day
           </Text>
         </StackItem>
 
@@ -76,9 +76,9 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Heading as="h2" size="sm" pb={1}>
             Research
           </Heading>
-          <Text pb={1}>{formatSerializeableBigNumber(ideasAvailable)} ideas</Text>
+          <Text pb={1}>{formatStandardNumber(ideasAvailable)} ideas</Text>
           <Text fontSize="sm" color="gray.400">
-            {formatSerializeableBigNumber(ideasGeneratedPerDay)} ideas per day
+            {formatStandardNumber(ideasGeneratedPerDay)} ideas per day
           </Text>
         </StackItem>
       </VStack>

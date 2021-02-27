@@ -1,7 +1,7 @@
 import { Button, Heading, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { canPurchaseGenerator, generatorDescriptions, generatorTypes } from "../lib/Generators";
-import { compare, formatSerializeableBigNumber, multiply, serializeNumber } from "../lib/SerializeableBigNumber";
+import { compare, formatStandardNumber, formatMoney, multiply, serializeNumber } from "../lib/SerializeableBigNumber";
 import { buyGenerator, selectCashAvailable, selectGenerators, selectMaxCashAvailable } from "../store/gameSlice";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 
@@ -29,14 +29,13 @@ const GenerationTab: React.FunctionComponent<Props> = (props) => {
               {generatorDescription.name} x {generator.numberOwned}
             </Heading>
             <Text pb={2} fontSize="sm" color="gray.400">
-              Generates {formatSerializeableBigNumber(generator.wattsPerDay)} watts per day --{" "}
-              {generatorDescription.colorText}
+              Generates {formatStandardNumber(generator.wattsPerDay)} watts per day -- {generatorDescription.colorText}
             </Text>
             <Button
               onClick={() => dispatch(buyGenerator(generatorType))}
               disabled={!canPurchaseGenerator(cashAvailable, generator)}
             >
-              Buy for ${formatSerializeableBigNumber(generator.nextPurchaseCost)}
+              Buy for ${formatMoney(generator.nextPurchaseCost, true)}
             </Button>
           </StackItem>
         );
