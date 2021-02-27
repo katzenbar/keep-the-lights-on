@@ -4,10 +4,13 @@ import { ChakraProvider, Box, theme, Flex, Divider } from "@chakra-ui/react";
 import SummaryPane from "./SummaryPane";
 import ContentPane from "./ContentPane";
 import store from "../store/store";
+import GameAutosaver from "../components/GameAutosaver";
 
 const App: React.FunctionComponent = () => (
   <ReduxProvider store={store}>
     <ChakraProvider theme={theme}>
+      <GameAutosaver />
+
       <Box>
         <Flex minH="100vh" direction="row" alignItems="stretch">
           <Box overflow="auto" w={250} p={3}>

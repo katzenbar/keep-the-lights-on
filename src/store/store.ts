@@ -1,9 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { loadGameState } from "../lib/gameStateSaves";
 import { gameSlice, tick } from "./gameSlice";
 
 const TICKS_PER_SECOND = 16;
 
+const preloadedGameState = loadGameState();
+
+let preloadedState;
+if (preloadedGameState) {
+  preloadedState = {
+    game: preloadedGameState,
+  };
+}
+
 const store = configureStore({
+  preloadedState,
   reducer: {
     game: gameSlice.reducer,
   },
