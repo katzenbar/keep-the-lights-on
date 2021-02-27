@@ -1,6 +1,7 @@
 import { Box, Button, chakra, Textarea, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { deserializeGameState } from "../../lib/gameStateSaves";
 import { resetGame } from "../../store/gameSlice";
 
 const importWarningMessage =
@@ -16,9 +17,9 @@ const ImportGameState: React.FunctionComponent<Props> = (props) => {
 
   const handleImport = () => {
     if (window.confirm(importWarningMessage)) {
-      try {
-        const parsedValue = JSON.parse(atob(value));
+      const parsedValue = deserializeGameState(value);
 
+      if (parsedValue) {
         dispatch(resetGame(parsedValue));
 
         toast({
@@ -29,7 +30,7 @@ const ImportGameState: React.FunctionComponent<Props> = (props) => {
           isClosable: true,
           position: "top-right",
         });
-      } catch (e) {
+      } else {
         toast({
           title: "Import Failed",
           description: "Importing the game save failed. Check that you have entered the entire game state.",

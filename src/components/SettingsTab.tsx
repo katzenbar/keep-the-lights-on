@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { ColorModeSwitcher } from "./SettingsTab/ColorModeSwitcher";
 import ExportedGameState from "./SettingsTab/ExportedGameState";
 import ImportGameState from "./SettingsTab/ImportGameState";
+import ManualSaveButton from "./SettingsTab/ManualSaveButton";
 
 const resetWarning =
   "This will reset all of your progress with no benefit, and cannot be undone. Are you sure you want to continue?";
@@ -17,10 +18,6 @@ const SettingsTab: React.FunctionComponent<Props> = (props) => {
 
   const dispatch = useAppDispatch();
   const ticksPerDay = useAppSelector(selectTicksPerDay);
-
-  const handleSave = () => {
-    console.log("woops!");
-  };
 
   const toggleShowExportedGameState = () => {
     setShowImportGameState(false);
@@ -49,22 +46,16 @@ const SettingsTab: React.FunctionComponent<Props> = (props) => {
 
       <StackItem>
         <Heading as="h2" size="sm" pb={2}>
-          Game Saves
+          Manual Game Saves
         </Heading>
         <HStack spacing={4}>
-          <Button onClick={handleSave}>Save</Button>
+          <ManualSaveButton />
           <Button onClick={toggleShowExportedGameState}>Export Game Save</Button>
           <Button onClick={toggleShowImportameState}>Import Game Save</Button>
           <Button onClick={handleResetSession}>Reset</Button>
         </HStack>
         {showExportedGameState && <ExportedGameState mt={4} />}
         {showImportGameState && <ImportGameState mt={4} />}
-      </StackItem>
-
-      <StackItem>
-        <Heading as="h2" size="sm" pb={2}>
-          Reset
-        </Heading>
       </StackItem>
 
       {process.env.NODE_ENV !== "production" && (
