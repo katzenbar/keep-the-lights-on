@@ -132,4 +132,15 @@ export const selectIdeasAvailable = (state: RootState) => state.game.currentStat
 export const selectMaxIdeasAvailable = (state: RootState) => state.game.currentStatistics.maxIdeasAvailable;
 export const selectPurchasedResearchProjects = (state: RootState) => state.game.purchasedResearchProjects;
 
+export const selectMaxCollected = (state: RootState) => ({
+  maxCashAvailable: state.game.currentStatistics.maxCashAvailable,
+  maxIdeasAvailable: state.game.currentStatistics.maxIdeasAvailable,
+});
+
+export const selectTotalCollected = (state: RootState) => ({
+  totalCashEarned: state.game.currentStatistics.totalCashEarned,
+  totalIdeasGenerated: state.game.currentStatistics.totalIdeasGenerated,
+  totalWattsSold: state.game.currentStatistics.totalWattsSold,
+});
+
 export default gameSlice.reducer;

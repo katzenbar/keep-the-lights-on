@@ -17,6 +17,7 @@ export type CurrentStatistics = {
 
   cashAvailable: SerializeableBigNumber;
   maxCashAvailable: SerializeableBigNumber;
+  totalCashEarned: SerializeableBigNumber;
   cashEarnedPerDay: SerializeableBigNumber;
 
   homesPowered: SerializeableBigNumber;
@@ -25,9 +26,11 @@ export type CurrentStatistics = {
 
   pricePerWatt: SerializeableBigNumber;
   wattsGeneratedPerDay: SerializeableBigNumber;
+  totalWattsSold: SerializeableBigNumber;
 
   ideasAvailable: SerializeableBigNumber;
   maxIdeasAvailable: SerializeableBigNumber;
+  totalIdeasGenerated: SerializeableBigNumber;
   ideasGeneratedPerDay: SerializeableBigNumber;
 };
 
@@ -37,6 +40,7 @@ export const defaultCurrentStatistics: CurrentStatistics = {
 
   cashAvailable: serializeNumber(1),
   maxCashAvailable: serializeNumber(0),
+  totalCashEarned: serializeNumber(0),
   cashEarnedPerDay: serializeNumber(0),
 
   homesPowered: serializeNumber(0),
@@ -45,9 +49,11 @@ export const defaultCurrentStatistics: CurrentStatistics = {
 
   pricePerWatt: serializeNumber(0.03),
   wattsGeneratedPerDay: serializeNumber(0),
+  totalWattsSold: serializeNumber(0),
 
   ideasAvailable: serializeNumber(0),
   maxIdeasAvailable: serializeNumber(0),
+  totalIdeasGenerated: serializeNumber(0),
   ideasGeneratedPerDay: serializeNumber(0),
 };
 
@@ -61,28 +67,24 @@ const getNextDaysElapsed = (currentStatistics: CurrentStatistics, tickCounter: n
   }
 };
 
-const getNextCashAvailable = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
-  const {
-    ticksPerDay,
-    cashAvailable,
-    homesInPowerGrid,
-    wattsUsedPerHomePerDay,
-    pricePerWatt,
-    wattsGeneratedPerDay,
-  } = currentStatistics;
+const getWattsConsumedPerTick = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
+  const { ticksPerDay, homesInPowerGrid, wattsUsedPerHomePerDay, wattsGeneratedPerDay } = currentStatistics;
 
   const wattsConsumedPerDay = min(wattsGeneratedPerDay, multiply(homesInPowerGrid, wattsUsedPerHomePerDay));
-  const cashEarnedPerDay = multiply(wattsConsumedPerDay, pricePerWatt);
 
-  return add(cashAvailable, divide(cashEarnedPerDay, serializeNumber(ticksPerDay)));
+  return divide(wattsConsumedPerDay, serializeNumber(ticksPerDay));
 };
 
-const getNextIdeasAvailable = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
-  const { ticksPerDay, ideasAvailable, ideasGeneratedPerDay } = currentStatistics;
+const getCashEarnedPerTick = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
+  const { pricePerWatt } = currentStatistics;
 
-  const ideasPerTick = divide(ideasGeneratedPerDay, serializeNumber(ticksPerDay));
+  return multiply(getWattsConsumedPerTick(currentStatistics), pricePerWatt);
+};
 
-  return add(ideasAvailable, ideasPerTick);
+const getIdeasPerTick = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
+  const { ticksPerDay, ideasGeneratedPerDay } = currentStatistics;
+
+  return divide(ideasGeneratedPerDay, serializeNumber(ticksPerDay));
 };
 
 export const getNextCurrentStatistics = (
@@ -91,19 +93,28 @@ export const getNextCurrentStatistics = (
 ): CurrentStatistics => {
   const daysElapsed = getNextDaysElapsed(currentStatistics, tickCounter);
 
-  const cashAvailable = getNextCashAvailable(currentStatistics);
+  const cashEarnedPerTick = getCashEarnedPerTick(currentStatistics);
+  const cashAvailable = add(currentStatistics.cashAvailable, cashEarnedPerTick);
+  const totalCashEarned = add(currentStatistics.totalCashEarned, cashEarnedPerTick);
   const maxCashAvailable = max(cashAvailable, currentStatistics.maxCashAvailable);
 
-  const ideasAvailable = getNextIdeasAvailable(currentStatistics);
-  const maxIdeasAvailable = max(ideasAvailable, currentStatistics.maxCashAvailable);
+  const ideasPerTick = getIdeasPerTick(currentStatistics);
+  const ideasAvailable = add(currentStatistics.ideasAvailable, ideasPerTick);
+  const totalIdeasGenerated = add(currentStatistics.totalIdeasGenerated, ideasPerTick);
+  const maxIdeasAvailable = max(ideasAvailable, currentStatistics.maxIdeasAvailable);
+
+  const totalWattsSold = add(currentStatistics.totalWattsSold, getWattsConsumedPerTick(currentStatistics));
 
   return {
     ...currentStatistics,
     daysElapsed,
     cashAvailable,
     maxCashAvailable,
+    totalCashEarned,
     ideasAvailable,
     maxIdeasAvailable,
+    totalIdeasGenerated,
+    totalWattsSold,
   };
 };
 
