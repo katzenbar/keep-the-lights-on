@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack, SimpleGrid, StackItem, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Heading, SimpleGrid, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { compare, formatMoney, formatStandardNumber, multiply, serializeNumber } from "../lib/SerializeableBigNumber";
 import { ascend, selectAscensionStats, selectMaxCollected, selectTotalCollected } from "../store/gameSlice";
