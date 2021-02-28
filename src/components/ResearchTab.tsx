@@ -1,6 +1,12 @@
 import { Button, Heading, StackItem, VStack, Text } from "@chakra-ui/react";
 import React from "react";
-import { researcherTypes, researcherDescriptions, canPurchaseResearcher, ResearcherType } from "../lib/Researchers";
+import {
+  researcherTypes,
+  researcherDescriptions,
+  canPurchaseResearcher,
+  ResearcherType,
+  defaultResearchersState,
+} from "../lib/Researchers";
 import { canPurchaseResearchProject, hasRequiredResearchProjects, researchProjects } from "../lib/ResearchProjects";
 import { compare, multiply, serializeNumber, formatStandardNumber, formatMoney } from "../lib/SerializeableBigNumber";
 import {
@@ -17,7 +23,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 const minimumResearcherCost = multiply(
   serializeNumber(0.75),
-  researcherDescriptions[ResearcherType.juniorResearchAssistant].baseCost,
+  defaultResearchersState[ResearcherType.juniorResearchAssistant].nextPurchaseCost,
 );
 
 type Props = {};
@@ -52,8 +58,9 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
           {researcherTypes.map((researcherType) => {
             const researcher = researchers[researcherType];
             const researcherDescription = researcherDescriptions[researcherType];
+            const baseCost = defaultResearchersState[researcherType].nextPurchaseCost;
 
-            if (compare(maxCashAvailable, multiply(serializeNumber(0.75), researcherDescription.baseCost)) === -1) {
+            if (compare(maxCashAvailable, multiply(serializeNumber(0.75), baseCost)) === -1) {
               return null;
             }
 
