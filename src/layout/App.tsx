@@ -13,7 +13,7 @@ const App: React.FunctionComponent = () => (
 
       <Box>
         <Flex minH="100vh" height="100vh" maxH="100vh" direction="row" alignItems="stretch">
-          <Box w={250} p={3} overflowY="auto">
+          <Box w={250} p={3} flexShrink={0} overflowY="auto">
             <SummaryPane />
           </Box>
           <Box>
