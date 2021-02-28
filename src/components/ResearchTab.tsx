@@ -18,6 +18,7 @@ import {
   selectIdeasAvailable,
   selectMaxIdeasAvailable,
   selectPurchasedResearchProjects,
+  selectIdeasMultiplier,
 } from "../store/gameSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
@@ -39,6 +40,8 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
 
   const researchers = useAppSelector(selectResearchers);
   const purchasedResearchProjects = useAppSelector(selectPurchasedResearchProjects);
+
+  const ideasMultiplier = useAppSelector(selectIdeasMultiplier);
 
   if (compare(maxCashAvailable, minimumResearcherCost) !== 1) {
     return (
@@ -70,7 +73,7 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
                   {researcherDescription.name} x {researcher.numberEmployed}
                 </Heading>
                 <Text pb={2} fontSize="sm" color="gray.400">
-                  Generates {formatStandardNumber(researcher.ideasPerDay)} ideas per day --{" "}
+                  Generates {formatStandardNumber(multiply(researcher.ideasPerDay, ideasMultiplier))} ideas per day --{" "}
                   {researcherDescription.colorText}
                 </Text>
                 <Button

@@ -2,7 +2,13 @@ import { Button, Heading, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { canPurchaseGenerator, defaultGeneratorsState, generatorDescriptions, generatorTypes } from "../lib/Generators";
 import { compare, formatStandardNumber, formatMoney, multiply, serializeNumber } from "../lib/SerializeableBigNumber";
-import { buyGenerator, selectCashAvailable, selectGenerators, selectMaxCashAvailable } from "../store/gameSlice";
+import {
+  buyGenerator,
+  selectCashAvailable,
+  selectGenerators,
+  selectMaxCashAvailable,
+  selectWattsMultiplier,
+} from "../store/gameSlice";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 
 type Props = {};
@@ -12,6 +18,7 @@ const GenerationTab: React.FunctionComponent<Props> = (props) => {
   const cashAvailable = useAppSelector(selectCashAvailable);
   const maxCashAvailable = useAppSelector(selectMaxCashAvailable);
   const generators = useAppSelector(selectGenerators);
+  const wattsMultiplier = useAppSelector(selectWattsMultiplier);
 
   return (
     <VStack align="stretch" spacing={4}>
@@ -30,7 +37,8 @@ const GenerationTab: React.FunctionComponent<Props> = (props) => {
               {generatorDescription.name} x {generator.numberOwned}
             </Heading>
             <Text pb={2} fontSize="sm" color="gray.400">
-              Generates {formatStandardNumber(generator.wattsPerDay)} watts per day -- {generatorDescription.colorText}
+              Generates {formatStandardNumber(multiply(generator.wattsPerDay, wattsMultiplier))} watts per day --{" "}
+              {generatorDescription.colorText}
             </Text>
             <Button
               onClick={() => dispatch(buyGenerator(generatorType))}
