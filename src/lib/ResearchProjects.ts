@@ -1,5 +1,5 @@
 import { GameState } from "../store/gameSlice";
-import { SerializeableBigNumber, serializeNumber } from "./SerializeableBigNumber";
+import { compare, SerializeableBigNumber, serializeNumber } from "./SerializeableBigNumber";
 
 export enum ResearchProjectType {
   expandGrid1 = "expandGrid1",
@@ -32,10 +32,29 @@ export const researchProjects: Array<ResearchProjectDescription> = [
     name: "Power the Neighborhood",
     description: "Expand your power grid to provide power to your whole street",
     cost: serializeNumber(2000),
-    requiresResearchProjects: [],
+    requiresResearchProjects: [ResearchProjectType.expandGrid1],
     applyResearch: (state) => {
       state.currentStatistics.homesInPowerGrid = serializeNumber(100);
       return state;
     },
   },
 ];
+
+export const hasRequiredResearchProjects = (
+  researchProject: ResearchProjectDescription,
+  purchasedResearchProjects: Array<ResearchProjectType>,
+): boolean => {
+  const purchasedSet = new Set(purchasedResearchProjects);
+  return researchProject.requiresResearchProjects.every((rp) => purchasedSet.has(rp));
+};
+
+export const canPurchaseResearchProject = (
+  ideasAvailable: SerializeableBigNumber,
+  researchProject: ResearchProjectDescription,
+  purchasedResearchProjects: Array<ResearchProjectType>,
+): boolean => {
+  if (compare(ideasAvailable, researchProject.cost) === -1) {
+    return false;
+  }
+  return hasRequiredResearchProjects(researchProject, purchasedResearchProjects);
+};
