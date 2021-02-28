@@ -36,7 +36,7 @@ const GenerationTab: React.FunctionComponent<Props> = (props) => {
             <Heading as="h2" size="sm" pb={1}>
               {generatorDescription.name} x {generator.numberOwned}
             </Heading>
-            <Text pb={2} fontSize="sm" color="gray.400">
+            <Text pb={2} fontSize="sm" color="gray.500">
               Generates {formatStandardNumber(multiply(generator.wattsPerDay, wattsMultiplier))} watts per day --{" "}
               {generatorDescription.colorText}
             </Text>

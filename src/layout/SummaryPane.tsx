@@ -49,7 +49,7 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
             Funds
           </Heading>
           <Text pb={1}>${formatMoney(cashAvailable)}</Text>
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm" color="gray.500">
             ${formatMoney(cashEarnedPerDay)} per day
           </Text>
         </StackItem>
@@ -59,7 +59,7 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
             Power Generation
           </Heading>
           <Text pb={1}>{formatStandardNumber(wattsGeneratedPerDay)} watts per day</Text>
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm" color="gray.500">
             ${formatMoney(pricePerWatt)} per watt
           </Text>
         </StackItem>
@@ -74,7 +74,7 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Text pb={1} color={compare(homesPowered, homesInPowerGrid) === 0 ? "red.500" : undefined}>
             {formatStandardNumber(percentOfHomesPowered)}%
           </Text>
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm" color="gray.500">
             {formatStandardNumber(wattsUsedPerHomePerDay)} watts used per house per day
           </Text>
         </StackItem>
@@ -84,7 +84,7 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
             Research
           </Heading>
           <Text pb={1}>{formatStandardNumber(ideasAvailable)} ideas</Text>
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm" color="gray.500">
             {formatStandardNumber(ideasGeneratedPerDay)} ideas per day
           </Text>
         </StackItem>
