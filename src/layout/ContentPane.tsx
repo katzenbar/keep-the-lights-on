@@ -9,7 +9,7 @@ type Props = {};
 
 const ContentPane: React.FunctionComponent<Props> = (props) => {
   return (
-    <Tabs>
+    <Tabs display="flex" flexDirection="column" maxH="100vh">
       <TabList>
         <Tab>Generation</Tab>
         <Tab>Research</Tab>
@@ -17,7 +17,7 @@ const ContentPane: React.FunctionComponent<Props> = (props) => {
         <Tab>Settings</Tab>
       </TabList>
 
-      <TabPanels>
+      <TabPanels flexGrow={1} overflowY="auto">
         <TabPanel>
           <GenerationTab />
         </TabPanel>

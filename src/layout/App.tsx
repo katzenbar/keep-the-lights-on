@@ -12,14 +12,14 @@ const App: React.FunctionComponent = () => (
       <GameAutosaver />
 
       <Box>
-        <Flex minH="100vh" direction="row" alignItems="stretch">
-          <Box overflow="auto" w={250} p={3}>
+        <Flex minH="100vh" height="100vh" maxH="100vh" direction="row" alignItems="stretch">
+          <Box w={250} p={3} flexShrink={0} overflowY="auto">
             <SummaryPane />
           </Box>
           <Box>
             <Divider orientation="vertical" />
           </Box>
-          <Box flexGrow={1} overflow="auto">
+          <Box flexGrow={1}>
             <ContentPane />
           </Box>
         </Flex>
