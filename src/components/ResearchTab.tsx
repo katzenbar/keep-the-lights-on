@@ -45,7 +45,7 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
 
   if (compare(maxCashAvailable, minimumResearcherCost) !== 1) {
     return (
-      <Text fontStyle="italic" color="gray.400">
+      <Text fontStyle="italic" color="gray.500">
         If you collect enough money, maybe you can hire staff to research improvements.
       </Text>
     );
@@ -72,7 +72,7 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
                 <Heading as="h3" size="sm" pb={1}>
                   {researcherDescription.name} x {researcher.numberEmployed}
                 </Heading>
-                <Text pb={2} fontSize="sm" color="gray.400">
+                <Text pb={2} fontSize="sm" color="gray.500">
                   Generates {formatStandardNumber(multiply(researcher.ideasPerDay, ideasMultiplier))} ideas per day --{" "}
                   {researcherDescription.colorText}
                 </Text>
@@ -93,7 +93,7 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
           Projects
         </Heading>
         {maxIdeasAvailable === serializeNumber(0) ? (
-          <Text fontStyle="italic" color="gray.400">
+          <Text fontStyle="italic" color="gray.500">
             Hire some researchers, and they might have an idea or two of how to improve your power grid.
           </Text>
         ) : (
@@ -115,7 +115,7 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
                   <Heading as="h3" size="sm" pb={1}>
                     {researchProject.name}
                   </Heading>
-                  <Text pb={2} fontSize="sm" color="gray.400">
+                  <Text pb={2} fontSize="sm" color="gray.500">
                     {researchProject.description}
                   </Text>
                   <Button

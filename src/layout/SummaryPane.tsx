@@ -1,6 +1,13 @@
 import { Heading, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
-import { divide, multiply, serializeNumber, formatStandardNumber, formatMoney } from "../lib/SerializeableBigNumber";
+import {
+  divide,
+  multiply,
+  serializeNumber,
+  formatStandardNumber,
+  formatMoney,
+  compare,
+} from "../lib/SerializeableBigNumber";
 import { selectCurrentStatistics } from "../store/gameSlice";
 import { useAppSelector } from "../store/hooks";
 
@@ -42,7 +49,7 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
             Funds
           </Heading>
           <Text pb={1}>${formatMoney(cashAvailable)}</Text>
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm" color="gray.500">
             ${formatMoney(cashEarnedPerDay)} per day
           </Text>
         </StackItem>
@@ -52,7 +59,7 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
             Power Generation
           </Heading>
           <Text pb={1}>{formatStandardNumber(wattsGeneratedPerDay)} watts per day</Text>
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm" color="gray.500">
             ${formatMoney(pricePerWatt)} per watt
           </Text>
         </StackItem>
@@ -64,10 +71,10 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Text pb={1}>
             {formatStandardNumber(homesPowered, 2)} / {formatStandardNumber(homesInPowerGrid)}
           </Text>
-          <Text pb={1} color={homesPowered === homesInPowerGrid ? undefined : "red.500"}>
+          <Text pb={1} color={compare(homesPowered, homesInPowerGrid) === 0 ? "red.500" : undefined}>
             {formatStandardNumber(percentOfHomesPowered)}%
           </Text>
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm" color="gray.500">
             {formatStandardNumber(wattsUsedPerHomePerDay)} watts used per house per day
           </Text>
         </StackItem>
@@ -77,7 +84,7 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
             Research
           </Heading>
           <Text pb={1}>{formatStandardNumber(ideasAvailable)} ideas</Text>
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm" color="gray.500">
             {formatStandardNumber(ideasGeneratedPerDay)} ideas per day
           </Text>
         </StackItem>
