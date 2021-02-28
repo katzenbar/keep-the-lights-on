@@ -1,6 +1,13 @@
 import { Heading, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
-import { divide, multiply, serializeNumber, formatStandardNumber, formatMoney } from "../lib/SerializeableBigNumber";
+import {
+  divide,
+  multiply,
+  serializeNumber,
+  formatStandardNumber,
+  formatMoney,
+  compare,
+} from "../lib/SerializeableBigNumber";
 import { selectCurrentStatistics } from "../store/gameSlice";
 import { useAppSelector } from "../store/hooks";
 
@@ -64,7 +71,7 @@ const SummaryPane: React.FunctionComponent<Props> = (props) => {
           <Text pb={1}>
             {formatStandardNumber(homesPowered, 2)} / {formatStandardNumber(homesInPowerGrid)}
           </Text>
-          <Text pb={1} color={homesPowered === homesInPowerGrid ? undefined : "red.500"}>
+          <Text pb={1} color={compare(homesPowered, homesInPowerGrid) === 0 ? "red.500" : undefined}>
             {formatStandardNumber(percentOfHomesPowered)}%
           </Text>
           <Text fontSize="sm" color="gray.400">
