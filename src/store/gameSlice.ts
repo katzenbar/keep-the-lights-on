@@ -20,7 +20,7 @@ import {
   ResearchersState,
   ResearcherType,
 } from "../lib/Researchers";
-import { canPurchaseResearchProject, researchProjects, ResearchProjectType } from "../lib/ResearchProjects";
+import { canPurchaseResearchProject, researchProjects } from "../lib/ResearchProjects";
 import { subtract } from "../lib/SerializeableBigNumber";
 import { RootState } from "./store";
 
@@ -28,7 +28,7 @@ export interface GameState {
   currentStatistics: CurrentStatistics;
   generators: GeneratorsState;
   researchers: ResearchersState;
-  purchasedResearchProjects: Array<ResearchProjectType>;
+  purchasedResearchProjects: Array<string>;
 }
 
 const initialState: GameState = {
@@ -82,7 +82,7 @@ export const gameSlice = createSlice({
       }
     },
 
-    purchaseResearchProject: (state, action: PayloadAction<ResearchProjectType>) => {
+    purchaseResearchProject: (state, action: PayloadAction<string>) => {
       const researchProject = researchProjects.find((project) => project.identifier === action.payload);
 
       if (
