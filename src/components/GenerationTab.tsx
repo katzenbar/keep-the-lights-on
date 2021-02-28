@@ -1,6 +1,6 @@
 import { Button, Heading, StackItem, Text, VStack } from "@chakra-ui/react";
 import React from "react";
-import { canPurchaseGenerator, generatorDescriptions, generatorTypes } from "../lib/Generators";
+import { canPurchaseGenerator, defaultGeneratorsState, generatorDescriptions, generatorTypes } from "../lib/Generators";
 import { compare, formatStandardNumber, formatMoney, multiply, serializeNumber } from "../lib/SerializeableBigNumber";
 import { buyGenerator, selectCashAvailable, selectGenerators, selectMaxCashAvailable } from "../store/gameSlice";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
@@ -18,8 +18,9 @@ const GenerationTab: React.FunctionComponent<Props> = (props) => {
       {generatorTypes.map((generatorType) => {
         const generator = generators[generatorType];
         const generatorDescription = generatorDescriptions[generatorType];
+        const baseCost = defaultGeneratorsState[generatorType].nextPurchaseCost;
 
-        if (compare(maxCashAvailable, multiply(serializeNumber(0.75), generatorDescription.baseCost)) === -1) {
+        if (compare(maxCashAvailable, multiply(serializeNumber(0.75), baseCost)) === -1) {
           return null;
         }
 

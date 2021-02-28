@@ -1,18 +1,32 @@
-import {
-  calculateWattsGenerated,
-  canPurchaseGenerator,
-  GeneratorsState,
-  GeneratorState,
-  GeneratorType,
-  generatorTypes,
-  purchaseGenerator,
-} from "./Generators";
+import { canPurchaseGenerator, GeneratorState, GeneratorType, generatorTypes, purchaseGenerator } from "./Generators";
 import { serializeNumber } from "./SerializeableBigNumber";
 
 describe("Generators", () => {
   describe("generatorTypes", () => {
     it("returns the generator types in order of increasing base cost", () => {
-      expect(generatorTypes).toEqual(["hamsters", "pinwheels", "bicycle"]);
+      expect(generatorTypes).toEqual([
+        "hamsters",
+        "pinwheels",
+        "handCrank",
+        "bicycle",
+        "solarPanel",
+        "picoHydro",
+        "biomass",
+        "tidalStream",
+        "solarDish",
+        "ethanol",
+        "smallHydro",
+        "windTurbine",
+        "coal",
+        "oil",
+        "solarPowerTower",
+        "naturalGas",
+        "hydroelectricDam",
+        "nuclearFission",
+        "spaceSolarArray",
+        "nuclearFusion",
+        "dysonSphere",
+      ]);
     });
   });
 
@@ -53,32 +67,7 @@ describe("Generators", () => {
 
     it("updates the nextPurchaseCost", () => {
       const updatedGenerator = purchaseGenerator(GeneratorType.pinwheels, generator);
-      expect(updatedGenerator.nextPurchaseCost).toEqual(serializeNumber(10));
-    });
-  });
-
-  describe("calculateWattsGenerated", () => {
-    const generatorsState: GeneratorsState = {
-      hamsters: {
-        numberOwned: 13,
-        wattsPerDay: serializeNumber(3),
-        nextPurchaseCost: serializeNumber(10),
-      },
-      pinwheels: {
-        numberOwned: 7,
-        wattsPerDay: serializeNumber(11),
-        nextPurchaseCost: serializeNumber(15),
-      },
-      bicycle: {
-        numberOwned: 5,
-        wattsPerDay: serializeNumber(19),
-        nextPurchaseCost: serializeNumber(20),
-      },
-    };
-
-    it("sums the watts per day generated for the different generator types", () => {
-      const result = calculateWattsGenerated(generatorsState);
-      expect(result).toEqual(serializeNumber(13 * 3 + 7 * 11 + 5 * 19));
+      expect(updatedGenerator.nextPurchaseCost).toEqual(serializeNumber(6));
     });
   });
 });
