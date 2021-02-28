@@ -96,6 +96,7 @@ export const gameSlice = createSlice({
         state = researchProject.applyResearch(state);
         state.currentStatistics.ideasAvailable = subtract(state.currentStatistics.ideasAvailable, researchProject.cost);
         state.purchasedResearchProjects.push(action.payload);
+        state.currentStatistics = updateCachedStatistics(state.currentStatistics, state.generators, state.researchers);
       }
     },
 
