@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, Link, Select, SimpleGrid, StackItem, Text, VStack } from "@chakra-ui/react";
+import { Button, Heading, HStack, Link, Select, StackItem, Text, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { selectTicksPerDay, updateTicksPerDay, resetGame } from "../store/gameSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
