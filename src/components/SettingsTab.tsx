@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, Select, StackItem, VStack } from "@chakra-ui/react";
+import { Button, Heading, HStack, Link, Select, SimpleGrid, StackItem, Text, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { selectTicksPerDay, updateTicksPerDay, resetGame } from "../store/gameSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -61,7 +61,7 @@ const SettingsTab: React.FunctionComponent<Props> = (props) => {
       {process.env.NODE_ENV !== "production" && (
         <StackItem>
           <Heading as="h2" size="sm" pb={2}>
-            Ticks per Second (Development Mode)
+            Ticks per Day (Development Mode)
           </Heading>
 
           <Select
@@ -77,6 +77,27 @@ const SettingsTab: React.FunctionComponent<Props> = (props) => {
           </Select>
         </StackItem>
       )}
+
+      <StackItem>
+        <Heading as="h2" size="sm" mb={2}>
+          About the Game
+        </Heading>
+        <Text color="gray.500" fontStyle="italic">
+          Version 0.0.1 &mdash;{" "}
+          <Link color="teal.500" href="https://github.com/katzenbar/keep-the-lights-on">
+            https://github.com/katzenbar/keep-the-lights-on
+          </Link>
+        </Text>
+
+        <Text mt={2}>
+          This game was developed as part of the{" "}
+          <Link color="teal.500" href="https://itch.io/jam/incremental-game-jam-2">
+            Incremental Game Jam 2
+          </Link>{" "}
+          on itch.io, over the course of one week in February 2021. Because of the time limit, the game may not be very
+          balanced and may have a few bugs. However, I hope that it is still enjoyable.
+        </Text>
+      </StackItem>
     </VStack>
   );
 };
