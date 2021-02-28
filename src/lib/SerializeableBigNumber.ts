@@ -17,6 +17,9 @@ export const serializeNumber = (value: DecimalSource): SerializeableBigNumber =>
   };
 };
 
+export const truncate = (a: SerializeableBigNumber): SerializeableBigNumber =>
+  serializeNumber(Decimal.trunc(toDecimal(a)));
+
 export const add = (a: SerializeableBigNumber, b: SerializeableBigNumber): SerializeableBigNumber =>
   serializeNumber(Decimal.add(toDecimal(a), toDecimal(b)));
 
