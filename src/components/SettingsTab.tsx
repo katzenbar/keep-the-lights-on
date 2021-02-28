@@ -83,7 +83,7 @@ const SettingsTab: React.FunctionComponent<Props> = (props) => {
           About the Game
         </Heading>
         <Text color="gray.500" fontStyle="italic">
-          Version 0.0.1 &mdash;{" "}
+          Version 0.1.1 &mdash;{" "}
           <Link color="teal.500" href="https://github.com/katzenbar/keep-the-lights-on">
             https://github.com/katzenbar/keep-the-lights-on
           </Link>
