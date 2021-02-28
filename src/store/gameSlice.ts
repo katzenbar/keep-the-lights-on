@@ -20,8 +20,8 @@ import {
   ResearchersState,
   ResearcherType,
 } from "../lib/Researchers";
-import { researchProjects, ResearchProjectType } from "../lib/ResearchProjects";
-import { compare, subtract } from "../lib/SerializeableBigNumber";
+import { canPurchaseResearchProject, researchProjects, ResearchProjectType } from "../lib/ResearchProjects";
+import { subtract } from "../lib/SerializeableBigNumber";
 import { RootState } from "./store";
 
 export interface GameState {
@@ -85,7 +85,14 @@ export const gameSlice = createSlice({
     purchaseResearchProject: (state, action: PayloadAction<ResearchProjectType>) => {
       const researchProject = researchProjects.find((project) => project.identifier === action.payload);
 
-      if (researchProject && compare(state.currentStatistics.ideasAvailable, researchProject.cost) !== -1) {
+      if (
+        researchProject &&
+        canPurchaseResearchProject(
+          state.currentStatistics.ideasAvailable,
+          researchProject,
+          state.purchasedResearchProjects,
+        )
+      ) {
         state = researchProject.applyResearch(state);
         state.currentStatistics.ideasAvailable = subtract(state.currentStatistics.ideasAvailable, researchProject.cost);
         state.purchasedResearchProjects.push(action.payload);

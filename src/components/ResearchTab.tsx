@@ -1,7 +1,7 @@
 import { Button, Heading, StackItem, VStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { researcherTypes, researcherDescriptions, canPurchaseResearcher, ResearcherType } from "../lib/Researchers";
-import { researchProjects } from "../lib/ResearchProjects";
+import { canPurchaseResearchProject, hasRequiredResearchProjects, researchProjects } from "../lib/ResearchProjects";
 import { compare, multiply, serializeNumber, formatStandardNumber, formatMoney } from "../lib/SerializeableBigNumber";
 import {
   selectCashAvailable,
@@ -93,7 +93,10 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
                 return null;
               }
 
-              if (compare(maxIdeasAvailable, multiply(serializeNumber(0.75), researchProject.cost)) === -1) {
+              if (
+                compare(maxIdeasAvailable, multiply(serializeNumber(0.75), researchProject.cost)) === -1 ||
+                !hasRequiredResearchProjects(researchProject, purchasedResearchProjects)
+              ) {
                 return null;
               }
 
@@ -107,7 +110,7 @@ const ResearchTab: React.FunctionComponent<Props> = (props) => {
                   </Text>
                   <Button
                     onClick={() => dispatch(purchaseResearchProject(researchProject.identifier))}
-                    disabled={compare(ideasAvailable, researchProject.cost) !== 1}
+                    disabled={!canPurchaseResearchProject(ideasAvailable, researchProject, purchasedResearchProjects)}
                   >
                     Purchase for {formatStandardNumber(researchProject.cost)} ideas
                   </Button>
