@@ -59,7 +59,7 @@ const expandTheGridProjects: Array<ResearchProjectDescription> = [
   return {
     identifier: `expandGrid_${type}`,
     name: `Power the ${capitalizedName}`,
-    description: `Expand your power grid to provide power to the ${type}, having ${formatStandardNumber(
+    description: `Expand your power grid to provide power to the ${type} with a base of ${formatStandardNumber(
       numHomes,
       0,
     )} homes`,
@@ -110,7 +110,7 @@ const salesPowerProjects: Array<ResearchProjectDescription> = [
   return {
     identifier: `salesPower_${type}`,
     name: `${capitalizedName} Sales`,
-    description: `Hire ${type} sales people to increase the price per watt to $${formatMoney(pricePerWatt)}`,
+    description: `Hire ${type} sales people to increase the base price per watt to $${formatMoney(pricePerWatt)}`,
     cost,
     requiresResearchProjects,
     applyResearch: (state) => {

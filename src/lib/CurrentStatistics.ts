@@ -11,6 +11,8 @@ import {
   subtract,
 } from "./SerializeableBigNumber";
 
+export type AscensionMultiplier = "wattsUsedMultiplier" | "priceMultiplier" | "wattsMultiplier" | "ideasMultiplier";
+
 export type CurrentStatistics = {
   daysElapsed: SerializeableBigNumber;
   ticksPerDay: number;
@@ -32,6 +34,13 @@ export type CurrentStatistics = {
   maxIdeasAvailable: SerializeableBigNumber;
   totalIdeasGenerated: SerializeableBigNumber;
   ideasGeneratedPerDay: SerializeableBigNumber;
+
+  timesAscended: number;
+  nextAscensionPrice: SerializeableBigNumber;
+  wattsUsedMultiplier: SerializeableBigNumber;
+  priceMultiplier: SerializeableBigNumber;
+  wattsMultiplier: SerializeableBigNumber;
+  ideasMultiplier: SerializeableBigNumber;
 };
 
 export const defaultCurrentStatistics: CurrentStatistics = {
@@ -55,6 +64,13 @@ export const defaultCurrentStatistics: CurrentStatistics = {
   maxIdeasAvailable: serializeNumber(0),
   totalIdeasGenerated: serializeNumber(0),
   ideasGeneratedPerDay: serializeNumber(0),
+
+  timesAscended: 0,
+  nextAscensionPrice: serializeNumber(1_000_000),
+  wattsUsedMultiplier: serializeNumber(1),
+  priceMultiplier: serializeNumber(1),
+  wattsMultiplier: serializeNumber(1),
+  ideasMultiplier: serializeNumber(1),
 };
 
 const getNextDaysElapsed = (currentStatistics: CurrentStatistics, tickCounter: number): SerializeableBigNumber => {
@@ -67,18 +83,44 @@ const getNextDaysElapsed = (currentStatistics: CurrentStatistics, tickCounter: n
   }
 };
 
-const getWattsConsumedPerTick = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
-  const { ticksPerDay, homesInPowerGrid, wattsUsedPerHomePerDay, wattsGeneratedPerDay } = currentStatistics;
+const getWattsUsedWithMulti = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
+  const { wattsUsedPerHomePerDay, wattsUsedMultiplier } = currentStatistics;
+  return multiply(wattsUsedPerHomePerDay, wattsUsedMultiplier);
+};
 
-  const wattsConsumedPerDay = min(wattsGeneratedPerDay, multiply(homesInPowerGrid, wattsUsedPerHomePerDay));
+const getWattsGeneratedWithMulti = (
+  currentStatistics: CurrentStatistics,
+  generators: GeneratorsState,
+): SerializeableBigNumber => {
+  const { wattsMultiplier } = currentStatistics;
+  const wattsGeneratedPerDay = calculateWattsGenerated(generators);
+  return multiply(wattsGeneratedPerDay, wattsMultiplier);
+};
+
+const getIdeasGeneratedWithMulti = (
+  currentStatistics: CurrentStatistics,
+  researchersState: ResearchersState,
+): SerializeableBigNumber => {
+  const { ideasMultiplier } = currentStatistics;
+  const ideasGeneratedPerDay = calculateIdeasCreated(researchersState);
+  return multiply(ideasGeneratedPerDay, ideasMultiplier);
+};
+
+const getWattsConsumedPerTick = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
+  const { ticksPerDay, homesInPowerGrid, wattsGeneratedPerDay } = currentStatistics;
+
+  const wattsConsumedPerDay = min(
+    wattsGeneratedPerDay,
+    multiply(homesInPowerGrid, getWattsUsedWithMulti(currentStatistics)),
+  );
 
   return divide(wattsConsumedPerDay, serializeNumber(ticksPerDay));
 };
 
 const getCashEarnedPerTick = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
-  const { pricePerWatt } = currentStatistics;
+  const { pricePerWatt, priceMultiplier } = currentStatistics;
 
-  return multiply(getWattsConsumedPerTick(currentStatistics), pricePerWatt);
+  return multiply(getWattsConsumedPerTick(currentStatistics), multiply(pricePerWatt, priceMultiplier));
 };
 
 const getIdeasPerTick = (currentStatistics: CurrentStatistics): SerializeableBigNumber => {
@@ -123,17 +165,20 @@ export const updateCachedStatistics = (
   generators: GeneratorsState,
   researchersState: ResearchersState,
 ) => {
-  const wattsGeneratedPerDay = calculateWattsGenerated(generators);
+  const wattsGeneratedPerDay = getWattsGeneratedWithMulti(currentStatistics, generators);
   const wattsConsumedPerDay = min(
     wattsGeneratedPerDay,
-    multiply(currentStatistics.homesInPowerGrid, currentStatistics.wattsUsedPerHomePerDay),
+    multiply(currentStatistics.homesInPowerGrid, getWattsUsedWithMulti(currentStatistics)),
   );
-  const cashEarnedPerDay = multiply(wattsConsumedPerDay, currentStatistics.pricePerWatt);
+  const cashEarnedPerDay = multiply(
+    wattsConsumedPerDay,
+    multiply(currentStatistics.pricePerWatt, currentStatistics.priceMultiplier),
+  );
   const homesPowered = min(
     currentStatistics.homesInPowerGrid,
-    divide(wattsGeneratedPerDay, currentStatistics.wattsUsedPerHomePerDay),
+    divide(wattsGeneratedPerDay, getWattsUsedWithMulti(currentStatistics)),
   );
-  const ideasGeneratedPerDay = calculateIdeasCreated(researchersState);
+  const ideasGeneratedPerDay = getIdeasGeneratedWithMulti(currentStatistics, researchersState);
 
   return { ...currentStatistics, cashEarnedPerDay, homesPowered, wattsGeneratedPerDay, ideasGeneratedPerDay };
 };

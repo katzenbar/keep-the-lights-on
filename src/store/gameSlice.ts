@@ -5,6 +5,7 @@ import {
   defaultCurrentStatistics,
   updateCachedStatistics,
   makePurchase,
+  AscensionMultiplier,
 } from "../lib/CurrentStatistics";
 import {
   canPurchaseGenerator,
@@ -21,7 +22,7 @@ import {
   ResearcherType,
 } from "../lib/Researchers";
 import { canPurchaseResearchProject, researchProjects } from "../lib/ResearchProjects";
-import { subtract } from "../lib/SerializeableBigNumber";
+import { add, multiply, serializeNumber, subtract } from "../lib/SerializeableBigNumber";
 import { RootState } from "./store";
 
 export interface GameState {
@@ -100,6 +101,30 @@ export const gameSlice = createSlice({
       }
     },
 
+    ascend: (state, action: PayloadAction<AscensionMultiplier>) => {
+      const { currentStatistics } = state;
+      const updatedCurrentStatistics = {
+        ...initialState.currentStatistics,
+        timesAscended: currentStatistics.timesAscended + 1,
+        nextAscensionPrice: multiply(currentStatistics.nextAscensionPrice, serializeNumber(10)),
+        wattsUsedMultiplier: currentStatistics.wattsUsedMultiplier,
+        priceMultiplier: currentStatistics.priceMultiplier,
+        wattsMultiplier: currentStatistics.wattsMultiplier,
+        ideasMultiplier: currentStatistics.ideasMultiplier,
+      };
+
+      updatedCurrentStatistics[action.payload] = add(updatedCurrentStatistics[action.payload], serializeNumber(0.1));
+
+      return {
+        ...initialState,
+        currentStatistics: updateCachedStatistics(
+          updatedCurrentStatistics,
+          initialState.generators,
+          initialState.researchers,
+        ),
+      };
+    },
+
     resetGame: (state, action: PayloadAction<GameState | undefined>) => {
       if (action.payload) {
         return action.payload;
@@ -116,6 +141,7 @@ export const {
   purchaseResearchProject,
   updateTicksPerDay,
   resetGame,
+  ascend,
 } = gameSlice.actions;
 
 export const selectGameState = (state: RootState) => state.game;
@@ -143,5 +169,29 @@ export const selectTotalCollected = (state: RootState) => ({
   totalIdeasGenerated: state.game.currentStatistics.totalIdeasGenerated,
   totalWattsSold: state.game.currentStatistics.totalWattsSold,
 });
+
+export const selectWattsMultiplier = (state: RootState) => state.game.currentStatistics.wattsMultiplier;
+export const selectIdeasMultiplier = (state: RootState) => state.game.currentStatistics.ideasMultiplier;
+
+export const selectAscensionStats = (state: RootState) => {
+  const currentStatistics = state.game.currentStatistics;
+  const {
+    timesAscended,
+    nextAscensionPrice,
+    wattsUsedMultiplier,
+    priceMultiplier,
+    wattsMultiplier,
+    ideasMultiplier,
+  } = currentStatistics;
+
+  return {
+    timesAscended,
+    nextAscensionPrice,
+    wattsUsedMultiplier,
+    priceMultiplier,
+    wattsMultiplier,
+    ideasMultiplier,
+  };
+};
 
 export default gameSlice.reducer;
